@@ -10,8 +10,14 @@ const app = express();
 //Create a connection to database
 connectDB();
 
-//Create a test
-app.get('/', (req, res) => res.send('API is running ...'))
+//Create a test route with a response
+app.get('/', (req, res) => res.send('API is running ...'));
+
+//Create a test routes to all essential funtionality
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/profile', require('./routes/api/profile'));
+app.use('/api/posts', require('./routes/api/posts'));
 
 //Set a port from process.env.PORT or 5000 if unavailable
 const PORT = process.env.PORT || 5000;

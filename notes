@@ -5,3 +5,4 @@ npm i express express-validator bcrypt config gravatar jsonwebtoken mongoose req
 npm i -D nodemon concurrently
 create a simple express server with a test route
 change run scripts at package.json - start backend with command => npm run server
+create all the essential routes
