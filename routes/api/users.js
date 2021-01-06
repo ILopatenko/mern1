@@ -29,7 +29,7 @@ router.post('/',
 [   //CHECKING BLOCK!
     check('name', 'Name is requared').not().isEmpty(),
     check('email', 'Please use a valid email').isEmail(),
-    check('password', 'Password should be at least 6 character').isLength({min: 6})
+    check('password', 'Password should be at least 6 character').isLength({min: 5})
 ], 
 async (req, res) => {
     const errors = validationResult(req);
