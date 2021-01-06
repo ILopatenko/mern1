@@ -19,6 +19,7 @@ const config = require('config');
 //Import check and validatonResult from express-validator to make a different validation data. https://express-validator.github.io/docs/
 const {check, validationResult} = require('express-validator');
 
+//Import a User model from models/User.js
 const User = require('../../models/User');
 
 // @route: POST => api/users

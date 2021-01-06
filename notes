@@ -8,3 +8,4 @@ change run scripts at package.json - start backend with command => npm run serve
 create all the essential routes
 finish registration a new user
 generating and sending the token after registration
+add custom middleware and JWT verify
