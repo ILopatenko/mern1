@@ -10,6 +10,12 @@ const gravatar = require('gravatar');
 //Import bcrypt - work with hash of passwords
 const bcrypt = require('bcrypt');
 
+//Import JWT -work with web tokens
+const jwt = require('jsonwebtoken');
+
+//Import config data from config/default.json
+const config = require('config');
+
 //Import check and validatonResult from express-validator to make a different validation data. https://express-validator.github.io/docs/
 const {check, validationResult} = require('express-validator');
 
@@ -65,7 +71,23 @@ try{
 
     //Return a jsonwebtoken
 
-    res.send('User registered!');
+    //res.send('User registered!');
+
+    const payload = {
+        user: {
+            id: user.id
+        }
+    };
+
+    jwt.sign(
+        payload, 
+        config.get('jwtSecret'),
+        {expiresIn: 10000},
+        (err, token) => {
+            if(err) throw err;
+            res.json({token});
+        });
+
 }catch(err){
     console.error(err.message);
     res.status(500).send('Server error');
