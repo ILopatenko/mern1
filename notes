@@ -9,3 +9,4 @@ create all the essential routes
 finish registration a new user
 generating and sending the token after registration
 add custom auth middleware and JWT verify
+create ProfileSchema
