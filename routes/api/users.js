@@ -25,6 +25,7 @@ const User = require('../../models/User');
 // @route: POST => api/users
 // @desc: Register a new user 
 // @access: Public
+
 router.post('/', 
 [   //CHECKING BLOCK!
     check('name', 'Name is requared').not().isEmpty(),
