@@ -10,3 +10,5 @@ finish registration a new user
 generating and sending the token after registration
 add custom auth middleware and JWT verify
 create ProfileSchema
+......
+npm i axios react-router-dom redux react-redux redux-thunk redux-devtools-extension moment react-moment
