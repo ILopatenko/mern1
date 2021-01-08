@@ -257,5 +257,82 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @route: PUT => api/profile/education
+// @desc: ADD profile EDUCATION
+// @access: Private
+router.put(
+    '/education', 
+    [
+        auth, 
+        [
+            check('school', 'School is required').not().isEmpty(),
+            check('degree', 'Degree is required').not().isEmpty(),
+            check('fieldofstudy', 'Field of study is required').not().isEmpty(),
+            check('from', 'From date is required').not().isEmpty(),
+        ]],
+        async (req, res) => {
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array});
+    };
+
+    const {
+        school,
+        degree,
+        fieldofstudy,
+        from
+    } = req.body;
+
+    const newEdu = {
+        school,
+        degree,
+        fieldofstudy,
+        from
+    };
+
+    try{
+         
+        const profile = await Profile.findOne({user: req.user.id});
+        profile.education.unshift(newEdu);
+        await profile.save();
+        res.json(profile);
+    }catch(err){
+        console.error(err.message);
+        res.status(500).send('Server error');
+    };
+}
+);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @route: DELETE => api/profile/education/:edu_id
+// @desc: DELETE education
+// @access: Private
+router.delete('/education/:edu_id', auth, async (req, res) => {
+    try {
+        //Get a profile of current user from database by ID
+        const profile = await Profile.findOne({user: req.user.id});
+        //FIND remove index
+        const removeIndex = profile.education
+        .map(item => item.id)
+        .indexOf(req.params.edu_id);
+        
+        //REMOVE education with index from previous step
+        profile.education.splice(removeIndex, 1);
+        
+        //Save the changes
+        await profile.save();
+
+        res.json(profile);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 
 module.exports = router;
