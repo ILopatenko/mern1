@@ -11,7 +11,7 @@ const app = express();
 connectDB();
 
 //Init a middleware
-app.use(express.json({extended: false}));
+app.use(express.json({ extended: false }));
 
 //Create a test route with a response
 app.get('/', (req, res) => res.send('API is running ...'));

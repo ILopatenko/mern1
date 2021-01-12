@@ -17,7 +17,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 
 //Import check and validatonResult from express-validator to make a different validation data. https://express-validator.github.io/docs/
-const {check, validationResult} = require('express-validator');
+const { check, validationResult } = require('express-validator');
 
 //Import a User model from models/User.js
 const User = require('../../models/User');
@@ -26,73 +26,74 @@ const User = require('../../models/User');
 // @desc: Register a new user 
 // @access: Public
 
-router.post('/', 
-[   //CHECKING BLOCK!
-    check('name', 'Name is requared').not().isEmpty(),
-    check('email', 'Please use a valid email').isEmail(),
-    check('password', 'Password should be at least 6 character').isLength({min: 5})
-], 
-async (req, res) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array()});
-};
+router.post('/',
+    [   //CHECKING BLOCK!
+        check('name', 'Name is requared').not().isEmpty(),
+        check('email', 'Please use a valid email').isEmail(),
+        check('password', 'Password should be at least 6 character').isLength({ min: 5 })
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        };
 
-const {name, email, password} = req.body;
+        const { name, email, password } = req.body;
 
-try{
-    //Check if user exists
-    let user = await User.findOne({email});
-    if(user){
-        return res.status(400).json({errors: [{msg: 'User is already exists'}]});
-    }
+        try {
+            //Check if user exists
+            let user = await User.findOne({ email });
+            if (user) {
+                return res.status(400).json({ errors: [{ msg: 'User is already exists' }] });
+            }
 
-    //Get user's gravatar
-    const avatar = gravatar.url(email, {
-        s: '200',
-        r: 'pg',
-        d: 'mm'
-    })
+            //Get user's gravatar
+            const avatar = gravatar.url(email, {
+                s: '200',
+                r: 'pg',
+                d: 'mm'
+            })
 
-    //Create a new instance of USER
-    user = new User({
-        name,
-        email,
-        avatar,
-        password
-    });
+            //Create a new instance of USER
+            user = new User({
+                name,
+                email,
+                avatar,
+                password
+            });
 
-    //Create a HASH of password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+            //Create a HASH of password
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
 
-    //Save a new USER to a database
-    await user.save();
+            //Save a new USER to a database
+            await user.save();
 
-    //Encrypt a password
+            //Encrypt a password
 
-    //Return a jsonwebtoken
+            //Return a jsonwebtoken
 
-    //res.send('User registered!');
+            //res.send('User registered!');
 
-    const payload = {
-        user: {
-            id: user.id
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            };
+
+            jwt.sign(
+                payload,
+                config.get('jwtSecret'),
+                { expiresIn: 10000 },
+                (err, token) => {
+                    if (err) throw err;
+                    res.json({ token });
+                });
+
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server error');
         }
-    };
-
-    jwt.sign(
-        payload, 
-        config.get('jwtSecret'),
-        {expiresIn: 10000},
-        (err, token) => {
-            if(err) throw err;
-            res.json({token});
-        });
-
-}catch(err){
-    console.error(err.message);
-    res.status(500).send('Server error');
-}});
+    });
 
 module.exports = router;
