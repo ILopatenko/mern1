@@ -165,7 +165,7 @@ router.delete('/', auth, async (req, res) => {
     try {
 
         //REMOVE ALL THE POSTS
-        await Post.deleteMany({ user: req.user.id });
+        //await Post.deleteMany({ user: req.user.id });
 
         //REMOVE PROFILE
         await Profile.findOneAndRemove({ user: req.user.id });

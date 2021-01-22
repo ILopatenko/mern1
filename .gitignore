@@ -2,3 +2,6 @@
 config/default.json
 node_modules
 client/debug.log
+client/.eslintcache
+client/.eslintcache
+client/debug.log
