@@ -19,4 +19,6 @@ export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
+export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
+
 

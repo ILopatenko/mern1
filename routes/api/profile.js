@@ -10,7 +10,7 @@ const auth = require('../../middleware/auth');
 //Import a User model from models/User.js
 const User = require('../../models/User');
 
-//Import a User model from models/User.js
+//Import a Profile model from models/Profile.js
 const Profile = require('../../models/Profile');
 
 //Import check and validatonResult from express-validator to make a different validation data. https://express-validator.github.io/docs/
@@ -163,6 +163,10 @@ router.get('/user/:user_id', async (req, res) => {
 // @access: Private
 router.delete('/', auth, async (req, res) => {
     try {
+
+        //REMOVE ALL THE POSTS
+        await Post.deleteMany({ user: req.user.id });
+
         //REMOVE PROFILE
         await Profile.findOneAndRemove({ user: req.user.id });
 

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addEducation, getCurrentProfile } from '../../actions/profile';
+import { deleteAcc, getCurrentProfile } from '../../actions/profile';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
 import DashboardActions from './DashboardActions';
@@ -9,7 +9,7 @@ import Experience from './Experience';
 import Education from './Education';
 
 
-const Dashboard = ({ getCurrentProfile, auth: { user }, profile: { profile, loading } }) => {
+const Dashboard = ({ getCurrentProfile, deleteAcc, auth: { user }, profile: { profile, loading } }) => {
     useEffect(() => {
         getCurrentProfile();
     }, [getCurrentProfile]);
@@ -25,6 +25,11 @@ const Dashboard = ({ getCurrentProfile, auth: { user }, profile: { profile, load
                     <DashboardActions />
                     <Education education={profile.education} />
                     <Experience experience={profile.experience} />
+                    <div className='my-2'>
+                        <button className="btn btn-danger" onClick={() => deleteAcc()}>
+                            <i className="fas fa-user-minus"></i> Delete my account
+                        </button>
+                    </div>
                 </Fragment>
             ) : (
                     <Fragment>
@@ -43,6 +48,7 @@ Dashboard.propTypes = {
     getCurrentProfile: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
+    deleteAcc: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -52,5 +58,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getCurrentProfile }
+    { getCurrentProfile, deleteAcc }
 )(Dashboard);
