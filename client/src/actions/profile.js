@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { CLEAR_PROFILE, GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE, ACCOUNT_DELETED } from './types';
+import { CLEAR_PROFILE, GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE, ACCOUNT_DELETED, GET_ALL_PROFILES, GET_REPOS } from './types';
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Get profile of current user
@@ -19,6 +19,79 @@ export const getCurrentProfile = () => async dispatch => {
     }
 };
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Get all profiles
+export const getProfiles = () => async dispatch => {
+
+    dispatch({
+        type: CLEAR_PROFILE
+    });
+
+    try {
+        const res = await axios.get('/api/profile');
+        dispatch({
+            type: GET_ALL_PROFILES,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Get PROFILE by ID
+export const getProfileById = userId => async dispatch => {
+
+    try {
+        const res = await axios.get(`/api/profile/user/${userId}`);
+        dispatch({
+            type: GET_PROFILE,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Get Github repos
+export const getGithubRepos = (githubUserName) => async dispatch => {
+
+    try {
+        const res = await axios.get(`/api/profile/github/${githubUserName}`);
+        dispatch({
+            type: GET_REPOS,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 
 
 
